@@ -1,0 +1,102 @@
+---
+title: \textbf{Rolling and expanding statistics}
+author: Jason Foster
+institute: CRAN - Package 'roll'
+date: today
+date-format: long
+format:
+  beamer:
+    include-in-header: header.tex
+    header-includes: \titlegraphic{\includegraphics[width=0.625in]{logo.png}}
+editor: visual
+---
+
+# **Rolling and expanding statistics**
+
+<!-- inches = px / ppi => 0.625 = 60 / 96 !-->
+
+**`roll`** is a package that provides fast and efficient computation of rolling and expanding statistics for time-series data:
+
+```{r eval = FALSE, echo = TRUE}
+install.packages("roll")
+```
+
+```{=tex}
+\begin{table}
+  \begin{minipage}{.5\linewidth}
+    \begin{tabular}[t]{ll}
+      \toprule
+        \textbf{Function} & \textbf{Description}\\
+      \midrule
+        \texttt{\textbf{roll\_sum}} & Sums\\ 
+        \texttt{\textbf{roll\_prod}} & Products\\ 
+        \texttt{\textbf{roll\_mean}} & Means\\ 
+        \texttt{\textbf{roll\_min}} & Minimums\\ 
+        \texttt{\textbf{roll\_max}} & Maximums\\ 
+        \texttt{\textbf{roll\_median}} & Medians\\ 
+        \texttt{\textbf{roll\_quantile}} & Quantiles\\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}%
+  \begin{minipage}{.5\linewidth}
+    \begin{tabular}[t]{ll}
+      \toprule
+        \textbf{Function} & \textbf{Description}\\
+      \midrule
+        \texttt{\textbf{roll\_var}} & Variances\\ 
+        \texttt{\textbf{roll\_sd}} & Standard deviations\\ 
+        \texttt{\textbf{roll\_scale}} & Scaling and centering\\ 
+        \texttt{\textbf{roll\_cov}} & Covariances\\ 
+        \texttt{\textbf{roll\_cor}} & Correlations\\ 
+        \texttt{\textbf{roll\_lm}} & Linear models\\ 
+        \texttt{\textbf{...}} & \textbf{And more!}\\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}
+\end{table}
+```
+# **Fast and efficient computation**
+
+Based on the speed requirements and sequential nature of many problems in practice, the **`roll`** package uses the following:
+
+```{=tex}
+\begin{columns}
+\begin{column}{.48\linewidth}
+
+\begin{itemize}
+\item High-performance parallel algorithms in \cpp{} via \textbf{\texttt{RcppParallel}}
+\item Flattens index to compute statistics in parallel across threads
+\item Online algorithms to update statistics and discard observations from memory
+\end{itemize}
+
+\end{column}
+\begin{column}{.48\linewidth}
+
+\hfill \break
+\includegraphics{example.png}
+
+\end{column}
+\end{columns}
+```
+# **Parallel programming tools for Rcpp**
+
+**`RcppParallel`**, developed by the Rcpp Core team, makes it easy to create safe, portable, high-performance parallel algorithms using \cpp{} and **`Rcpp`**:
+
+```{r eval = FALSE, echo = TRUE}
+install.packages("RcppParallel")
+```
+
+In particular, **`RcppParallel`** provides two high-level parallel algorithms:
+
+-   **`parallelFor()`**: convert the work of a standard serial "for" loop into a parallel one
+-   **`parallelReduce()`**: compute and aggregate multiple values in parallel
+
+For more information, visit the **`RcppParallel`** website: [\underline{https://rcppcore.github.io/RcppParallel/}](https://rcppcore.github.io/RcppParallel/)
+
+# **Benchmarks for roll-like packages**
+
+<!-- 3.2 + 1.6 = 4.8 !-->
+
+<!-- https://github.com/Rdatatable/data.table/issues/2778 !-->
+
+Full data set includes 1,000,000 observations and 1,000 columns. A rolling window requires over `r (1000000 * 1000) / 1000000000` billion calculations! Note window size.

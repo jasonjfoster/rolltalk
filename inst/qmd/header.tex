@@ -1,0 +1,65 @@
+\usetheme{Boadilla}
+\usepackage{booktabs}
+% \usecolortheme[named=gray]{structure}
+% \usecolortheme{beaver}
+\useinnertheme{rectangles}
+\definecolor{my_orange}{RGB}{236,105,65}
+\definecolor{my_green}{RGB}{20,76,89}
+\def\cpp{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}}}
+
+\setbeamercolor{title}{fg=my_orange}
+\setbeamercolor{titlelike}{bg=}
+\setbeamercolor{frametitle}{fg=my_orange,bg=white}
+\setbeamercolor{author in head/foot}{fg=my_orange,bg=white}
+\setbeamercolor{title in head/foot}{fg=my_orange,bg=white}
+\setbeamercolor{framenumber}{fg=my_orange,bg=white}
+\setbeamercolor{item}{fg=black}
+
+\defbeamertemplate*{frametitle}{my frametitle}{
+  \ifnum\insertpagenumber=1
+    \hbox{%
+      \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,center]{}%
+        % empty environment to raise height
+      \end{beamercolorbox}
+    }%
+  \else
+    \hbox{%
+      \begin{beamercolorbox}[wd=.88\paperwidth,ht=2.25ex,dp=1ex,left]{title in head/foot}%
+        \insertframetitle
+      \end{beamercolorbox}%
+      \begin{beamercolorbox}[wd=.12\paperwidth,ht=2.25ex,dp=1ex,left]{logo in head/foot}%
+        \vspace{-0.35cm}\includegraphics[width=0.3125in]{logo.png}
+      \end{beamercolorbox}
+    }%
+  \fi
+}
+
+\setbeamertemplate{frametitle}[my frametitle]
+
+\defbeamertemplate*{footline}{my footline}{
+  \ifnum\insertpagenumber=1
+    \hbox{%
+      \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,center]{}%
+        % empty environment to raise height
+      \end{beamercolorbox}
+    }%
+  \else
+    \hrule
+    \vspace{0.1cm}
+    \leavevmode%
+    \hbox{%
+      \begin{beamercolorbox}[wd=.15\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+        \textbf{\href{mailto:jason.j.foster@gmail.com}{Jason Foster}}
+      \end{beamercolorbox}%
+      \begin{beamercolorbox}[wd=.70\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+        \textbf{\href{https://CRAN.R-project.org/package=roll}{CRAN - Package 'roll'}}
+      \end{beamercolorbox}%
+      \begin{beamercolorbox}[wd=.15\paperwidth,ht=2.25ex,dp=1ex,center]{framenumber}%
+        \textbf{\insertframenumber{} / \inserttotalframenumber}
+      \end{beamercolorbox}
+    }%
+    \vspace{0.1cm}
+  \fi
+}
+
+\setbeamertemplate{footline}[my footline]
