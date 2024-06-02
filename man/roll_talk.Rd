@@ -7,7 +7,7 @@
 roll_talk(...)
 }
 \arguments{
-\item{...}{Additional arguments passed to \code{\link[quarto::quarto_render]{quarto::quarto_render}}.}
+\item{...}{Additional arguments passed to \code{\link[quarto:quarto_render]{quarto::quarto_render}}.}
 }
 \description{
 A presentation for rolling and expanding statistics of time-series data.

@@ -2,7 +2,7 @@
 ##'
 ##' A presentation for rolling and expanding statistics of time-series data.
 ##'
-##' @param ... Additional arguments passed to \code{\link[quarto::quarto_render]{quarto::quarto_render}}.
+##' @param ... Additional arguments passed to \code{\link[quarto:quarto_render]{quarto::quarto_render}}.
 ##' @examples
 ##' \dontrun{
 ##' # rolling exploratory data analysis
