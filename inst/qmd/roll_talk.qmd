@@ -100,3 +100,193 @@ For more information, visit the **`RcppParallel`** website: [\underline{https://
 <!-- https://github.com/Rdatatable/data.table/issues/2778 !-->
 
 Full data set includes 1,000,000 observations and 1,000 columns. A rolling window requires over `r (1000000 * 1000) / 1000000000` billion calculations! Note window size.
+
+```{r echo = FALSE}
+read_df <- function(file, group) {
+  
+  filename <- paste0(file, "_", group)
+  
+  # load(paste0(filename, ".rda"))
+  df <- eval(parse(text = paste0("rolltalk::", filename)))
+  
+  dt <- data.table::as.data.table(list(fn = colnames(df),
+                                       value = colMeans(df, na.rm = TRUE),
+                                       group = group))
+  
+  return(dt)
+  
+}
+
+file <- "bench"
+width_ls <- c(100, 1000)
+bench_ls <- lapply(1:length(width_ls), function(i) read_df(file, width_ls[i]))
+
+bench_df <- data.table::rbindlist(bench_ls)
+bench_df[ , fn := factor(fn, levels = unique(fn))]
+# bench_df[ , group := factor(group, levels = width_ls)]
+
+bench_df[ , facet := "left"]
+bench_df[fn == "RcppRoll::roll_meanr"][["facet"]] <- "right"
+```
+
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center", fig.height = 2.4, fig.width = 4.6}
+# utils <- "utils.R"
+utils <- system.file("qmd", "utils.R", package = "rolltalk")
+source(utils)
+
+bench_cols <- c("RcppRoll::roll_meanr", "RollingWindow::RollingMean", "fromo::running_mean", "roll::roll_mean",
+                "data.table::frollmean", "roll::roll_mean*", "data.table::frollmean*")
+
+bench_plt <- ggplot2::ggplot() +
+  theme_jjf() +
+  ggplot2::theme(text = ggplot2::element_text(size = 8),
+                 axis.text.y = ggplot2::element_text(size = 8),
+                 legend.key.size = ggplot2::unit(0.8, "lines"),
+                 legend.text = ggplot2::element_text(size = 8),
+                 legend.title = ggplot2::element_text(size = 8),
+                 plot.margin = ggplot2::unit(c(0.1, 0, 0, 0), "inches"),
+                 strip.text = ggplot2::element_blank()) +
+  ggplot2::labs(title = "Rolling means", x = "", y = "Seconds", fill = "Width") +
+  # ggplot2::scale_y_continuous(breaks = round(seq(0, 20, length.out = 5), 1),
+  #                             limits = c(0, 20)) +
+  ggplot2::geom_col(data = rev(bench_df[fn %in% bench_cols]), ggplot2::aes(x = fn, y = value, fill = as.factor(group)),
+                    position = ggplot2::position_dodge2(preserve = "single", padding = 0, reverse = TRUE)) +
+  ggplot2::facet_wrap(~facet, scales = "free_x") +
+  ggplot2::scale_fill_manual(values = palette_jjf(3)[c(1, 3)],
+                             labels = scales::label_comma()(unique(bench_df[["group"]]))) +
+  ggplot2::coord_flip()
+
+print(bench_plt)
+```
+
+\tiny\textit{Uses default arguments and 8 cores (16 threads) on a 2.4GHz laptop unless noted: (*) uses one thread}
+
+# **Benchmarks for roll functions**
+
+Take advantage of parallel processing in \cpp{} and online algorithms in the `roll` package for rolling and expanding statistics:
+
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center", fig.height = 2.4, fig.width = 4.6}
+bench_cols <- c("roll::roll_lm*^", "roll::roll_lm*", "roll::roll_lm^", "roll::roll_lm")
+
+bench_plt <- ggplot2::ggplot() +
+  theme_jjf() +
+  ggplot2::theme(text = ggplot2::element_text(size = 8),
+                 axis.text.y = ggplot2::element_text(size = 8),
+                 legend.key.size = ggplot2::unit(0.8, "lines"),
+                 legend.text = ggplot2::element_text(size = 8),
+                 legend.title = ggplot2::element_text(size = 8),
+                 plot.margin = ggplot2::unit(c(0.1, 0, 0, 0), "inches"),
+                 strip.text = ggplot2::element_blank()) +
+  ggplot2::labs(title = "Rolling linear models", x = "", y = "Seconds", fill = "Width") +
+  # scale_y_continuous(breaks = round(seq(0, 20, length.out = 5), 1),
+  #                    limits = c(0, 20)) +
+  ggplot2::geom_col(data = rev(bench_df[fn %in% bench_cols]), ggplot2::aes(x = fn, y = value, fill = as.factor(group)),
+                    position = ggplot2::position_dodge2(preserve = "single", padding = 0, reverse = TRUE)) +
+  ggplot2::facet_wrap(~facet, scales = "free_x") +
+  ggplot2::scale_fill_manual(values = palette_jjf(3)[c(1, 3)],
+                             labels = scales::label_comma()(unique(bench_df[["group"]]))) +
+  ggplot2::coord_flip()
+
+print(bench_plt)
+```
+
+\tiny\textit{Uses default arguments and 8 cores (16 threads) on a 2.4GHz laptop unless noted: (*) uses one thread; (\^{}) uses offline algorithms}
+
+# **Title**
+
+<!-- https://quarto.org/docs/authoring/markdown-basics.html#raw-content -->
+
+Header section
+
+```{=tex}
+\begin{columns}
+\begin{column}{.48\linewidth}
+```
+$$
+\begin{aligned}
+\text{Left column (formula)}
+\end{aligned}
+$$
+
+```{r eval = FALSE, echo = TRUE}
+# Left column (code)
+```
+
+```{=tex}
+\end{column}
+\begin{column}{.48\linewidth}
+```
+```{r echo = FALSE, fig.align = "center", fig.height = 3.2, fig.width = 3.2}
+print("Right column (chart; note: adjust height)")
+```
+
+```{=tex}
+\end{column}
+\end{columns}
+```
+```{r eval = FALSE, echo = TRUE}
+# Footer section (code)
+```
+
+# **Include roll in other packages**
+
+<!-- https://rd-rcpp.thecoatlessprofessor.com/rcpp-shared-cpp-functions/ !-->
+
+Provides a set of \cpp{} functions to be used by other packages:
+
+1.  Modify the `DESCRIPTION` file to include the `roll` package
+
+```         
+LinkingTo: roll (>= 1.1.7)
+```
+
+2.  Add the following line to a \cpp{} file in the `src` folder
+
+```{Rcpp eval = FALSE, echo = TRUE}
+#include <roll.h>
+```
+
+3.  Retrieve the \cpp{} functions with the namespace `roll`
+
+```{Rcpp eval = FALSE, echo = TRUE}
+roll::RollSumOnlineMat()
+roll::RollProdOnlineMat()
+roll::RollMeanOnlineMat()
+roll::RollMinOnlineMat()
+// and more!
+```
+
+# **CRAN - Package 'roll'**
+
+Get the released version from CRAN:
+
+```{r eval = FALSE, echo = TRUE}
+install.packages("roll")
+```
+
+Or the development version from GitHub:
+
+```{r eval = FALSE, echo = TRUE}
+# install.packages("devtools")
+devtools::install_github("jasonjfoster/roll")
+```
+
+# **r-universe - 'roll\*'**
+
+Get the latest versions from r-universe:
+
+```{r eval = FALSE, echo = TRUE}
+packages <- c("roll", "rolleda", "rolleigen",
+              "rolloptim", "rollshap", "rolltalk")
+r_universe <- "https://jasonjfoster.r-universe.dev"
+install.packages(packages, repos = r_universe)
+```
+
+# **Thank you!**
+
+Contact me at [\underline{jason.j.foster at gmail.com}](mailto:jason.j.foster@gmail.com) and visit the following resources for more information:
+
+-   GitHub: [\underline{https://github.com/jasonjfoster}](https://github.com/jasonjfoster)
+-   GitHub Pages: [\underline{https://jasonjfoster.github.io}](https://jasonjfoster.github.io)
+-   r-universe: [\underline{https://jasonjfoster.r-universe.dev}](https://jasonjfoster.r-universe.dev)
+-   shinyapps.io: [\underline{https://jasonjfoster.shinyapps.io/rolleda}](https://jasonjfoster.shinyapps.io/rolleda)
