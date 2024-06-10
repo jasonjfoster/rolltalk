@@ -73,3 +73,89 @@ palette_jjf <- function(n_cols, n_rows = 1) {
   return(result)
 
 }
+
+scale_color_jjf <- function(...) {
+
+  ggplot2::discrete_scale("color", palette = palette_jjf, ...)
+
+}
+
+scale_fill_jjf <- function(...) {
+
+  ggplot2::discrete_scale("fill", palette = palette_jjf, ...)
+
+}
+
+capitalize <- function(string) {
+  string <- as.character(string)
+  gsub("^(\\w)", "\\U\\1", string, perl = TRUE)
+}
+
+plot_jjf <- function(dt, x, y, z, decomp, title, xlab, ylab, multiple, palette, stack) {
+
+  if (!is.null(palette)) {
+    dt[ , (z) := factor(get(z), levels = names(palette))]
+  } else {
+    dt[ , (z) := factor(capitalize(get(z)), levels = unique(capitalize(get(z))))]
+  }
+
+  result <- ggplot2::ggplot() +
+    theme_jjf() +
+    ggplot2::labs(title = title, x = xlab, y = ylab)
+
+  if (stack) {
+
+    result <- result +
+      ggplot2::geom_area(data = dt[get(z) != decomp],
+                         ggplot2::aes(x = get(x), y = get(y) * multiple, fill = get(z))) +
+      ggplot2::geom_line(data = dt[get(z) == decomp],
+                         ggplot2::aes(x = get(x), y = get(y) * multiple, color = get(z)))
+
+    if (!is.null(palette)) {
+
+      result <- result +
+        ggplot2::scale_fill_manual(values = palette)
+      # ggplot2::scale_fill_manual(values = palette, guide = ggplot2::guide_legend(order = 2)) +
+      # ggplot2::scale_color_manual(values = palette, guide = ggplot2::guide_legend(order = 1))
+
+    } else {
+
+      result <- result +
+        scale_fill_jjf(guide = ggplot2::guide_legend(order = 2)) +
+        ggplot2::scale_color_manual(values = "black", guide = ggplot2::guide_legend(order = 1))
+
+    }
+
+  } else {
+
+    result <- result +
+      ggplot2::geom_line(data = dt,
+                         ggplot2::aes(x = get(x), y = get(y) * multiple, color = get(z)))
+
+    if (!is.null(palette)) {
+
+      result <- result +
+        ggplot2::scale_color_manual(values = palette)
+
+    } else {
+
+      result <- result +
+        scale_color_jjf()
+
+    }
+
+  }
+
+  return(result)
+
+}
+
+plot_ts <- function(dt, x = "index", y = "value", z = "variable",
+                    title = NULL, xlab = NULL, ylab = NULL,
+                    multiple = 1, palette = NULL, stack = FALSE) {
+
+  result <- plot_jjf(dt, x, y, z, NULL, title, xlab, ylab, multiple, palette, stack)
+
+  return(result)
+
+}

@@ -55,6 +55,7 @@ install.packages("roll")
   \end{minipage}
 \end{table}
 ```
+
 # **Fast and efficient computation**
 
 Based on the speed requirements and sequential nature of many problems in practice, the **`roll`** package uses the following:
@@ -78,6 +79,7 @@ Based on the speed requirements and sequential nature of many problems in practi
 \end{column}
 \end{columns}
 ```
+
 # **Parallel programming tools for Rcpp**
 
 **`RcppParallel`**, developed by the Rcpp Core team, makes it easy to create safe, portable, high-performance parallel algorithms using \cpp{} and **`Rcpp`**:
@@ -192,40 +194,58 @@ print(bench_plt)
 
 \tiny\textit{Uses default arguments and 8 cores (16 threads) on a 2.4GHz laptop unless noted: (*) uses one thread; (\^{}) uses offline algorithms}
 
-# **Title**
+# **Rolling means**
 
 <!-- https://quarto.org/docs/authoring/markdown-basics.html#raw-content -->
 
-Header section
+A function for computing the rolling and expanding means of time-series data:
 
 ```{=tex}
 \begin{columns}
 \begin{column}{.48\linewidth}
 ```
+
 $$
 \begin{aligned}
-\text{Left column (formula)}
+\text{mean}&=\frac{1}{n}\sum_{i=1}^{n}{x_{i}}
 \end{aligned}
 $$
 
 ```{r eval = FALSE, echo = TRUE}
-# Left column (code)
+mean <- sum(x) / length(x)
 ```
 
 ```{=tex}
 \end{column}
 \begin{column}{.48\linewidth}
 ```
+
 ```{r echo = FALSE, fig.align = "center", fig.height = 3.2, fig.width = 3.2}
-print("Right column (chart; note: adjust height)")
+set.seed(5640)
+n_vars <- 4
+n_obs <- 1500
+n_size <- n_obs * n_vars
+dates <- rev(seq(Sys.Date(), length.out = n_obs, by = "-1 day"))
+
+x <- matrix(rnorm(n_obs * n_vars), nrow = n_obs, ncol = n_vars)
+x <- zoo::zoo(x, dates)
+
+mean_mat <- na.omit(roll::roll_mean(x, width = 15))
+mean_mlt <- data.table::melt(data.table::as.data.table(mean_mat, keep.rownames = TRUE), id.vars = "rn")
+mean_mlt[ , rn := as.Date(rn)]
+
+mean_plt <- plot_ts(mean_mlt, x = "rn", title = "Rolling means")
+
+print(mean_plt)
 ```
 
 ```{=tex}
 \end{column}
 \end{columns}
 ```
+
 ```{r eval = FALSE, echo = TRUE}
-# Footer section (code)
+roll::roll_mean(x, width)
 ```
 
 # **Include roll in other packages**
