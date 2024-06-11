@@ -231,10 +231,11 @@ x <- matrix(rnorm(n_obs * n_vars), nrow = n_obs, ncol = n_vars)
 x <- zoo::zoo(x, dates)
 
 mean_mat <- na.omit(roll::roll_mean(x, width = 15))
-mean_mlt <- data.table::melt(data.table::as.data.table(mean_mat, keep.rownames = TRUE), id.vars = "rn")
-mean_mlt[ , rn := as.Date(rn)]
+mean_mlt <- data.table::melt(data.table::as.data.table(mean_mat, keep.rownames = "index"),
+                             id.vars = "index")
+mean_mlt[ , index := as.Date(index)]
 
-mean_plt <- plot_ts(mean_mlt, x = "rn", title = "Rolling means")
+mean_plt <- plot_ts(mean_mlt, title = "Rolling means")
 
 print(mean_plt)
 ```
