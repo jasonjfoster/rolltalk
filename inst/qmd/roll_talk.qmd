@@ -203,16 +203,13 @@ A function for computing the rolling and expanding means of time-series data:
 \begin{columns}
 \begin{column}{.48\linewidth}
 ```
-
-Expanding window
-$$
+Expanding window $$
 \begin{aligned}
 \text{sum}_{x}\leftarrow&\text{sum}_{x}+\text{x}_{new}
 \end{aligned}
 $$
 
-Rolling window
-$$
+Rolling window $$
 \begin{aligned}
 \text{sum}_{x}\leftarrow&\text{sum}_{x}+\text{x}_{new}-\text{x}_{old}
 \end{aligned}
@@ -222,7 +219,6 @@ $$
 \end{column}
 \begin{column}{.48\linewidth}
 ```
-
 ```{r echo = FALSE, fig.align = "center", fig.height = 3.2, fig.width = 3.2}
 set.seed(5640)
 n_vars <- 4
@@ -260,8 +256,7 @@ A function for computing the rolling and expanding linear models of time-series 
 Expanding window
 $$
 \begin{aligned}
-\text{sumsq}_{xy}\leftarrow&\text{sumsq}_{xy}+(\text{x}_{new}-\text{mean}_{x})(\text{y}_{new}-\text{mean}_{prev_y})\\
-\text{coef}\leftarrow&\text{sumsq}_{xx}^{-1}\times\text{sumsq}_{xy}\\
+\text{sumsq}_{xy}\leftarrow&\text{sumsq}_{xy}+(\text{x}_{new}-\text{mean}_{x})(\text{y}_{new}-\text{mean}_{prev_y})
 \end{aligned}
 $$
 
@@ -269,8 +264,7 @@ Rolling window
 $$
 \begin{aligned}
 \text{sumsq}_{xy}\leftarrow&\text{sumsq}_{xy}+(\text{x}_{new}-\text{mean}_{x})(\text{y}_{new}-\text{mean}_{prev_y})-\\
-&(\text{x}_{old}-\text{mean}_{x})(\text{y}_{old}-\text{mean}_{prev_y})\\
-\text{coef}\leftarrow&\text{sumsq}_{xx}^{-1}\times\text{sumsq}_{xy}\\
+&(\text{x}_{old}-\text{mean}_{x})(\text{y}_{old}-\text{mean}_{prev_y})
 \end{aligned}
 $$
 
