@@ -55,7 +55,6 @@ install.packages("roll")
   \end{minipage}
 \end{table}
 ```
-
 # **Fast and efficient computation**
 
 Based on the speed requirements and sequential nature of many problems in practice, the **`roll`** package uses the following:
@@ -79,7 +78,6 @@ Based on the speed requirements and sequential nature of many problems in practi
 \end{column}
 \end{columns}
 ```
-
 # **Parallel programming tools for Rcpp**
 
 **`RcppParallel`**, developed by the Rcpp Core team, makes it easy to create safe, portable, high-performance parallel algorithms using \cpp{} and **`Rcpp`**:
@@ -109,6 +107,7 @@ read_df <- function(file, group) {
   filename <- paste0(file, "_", group)
   
   # load(paste0(filename, ".rda"))
+  # df <- get(filename)
   df <- eval(parse(text = paste0("rolltalk::", filename)))
   
   dt <- data.table::as.data.table(list(fn = colnames(df),
@@ -146,7 +145,7 @@ bench_plt <- ggplot2::ggplot() +
                  legend.key.size = ggplot2::unit(0.8, "lines"),
                  legend.text = ggplot2::element_text(size = 8),
                  legend.title = ggplot2::element_text(size = 8),
-                 plot.margin = ggplot2::unit(c(0.1, 0, 0, 0), "inches"),
+                 # plot.margin = ggplot2::unit(c(0.1, 0, 0, 0), "inches"),
                  strip.text = ggplot2::element_blank()) +
   ggplot2::labs(title = "Rolling means", x = "", y = "Seconds", fill = "Width") +
   # ggplot2::scale_y_continuous(breaks = round(seq(0, 20, length.out = 5), 1),
@@ -177,7 +176,7 @@ bench_plt <- ggplot2::ggplot() +
                  legend.key.size = ggplot2::unit(0.8, "lines"),
                  legend.text = ggplot2::element_text(size = 8),
                  legend.title = ggplot2::element_text(size = 8),
-                 plot.margin = ggplot2::unit(c(0.1, 0, 0, 0), "inches"),
+                 # plot.margin = ggplot2::unit(c(0.1, 0, 0, 0), "inches"),
                  strip.text = ggplot2::element_blank()) +
   ggplot2::labs(title = "Rolling linear models", x = "", y = "Seconds", fill = "Width") +
   # scale_y_continuous(breaks = round(seq(0, 20, length.out = 5), 1),
@@ -205,15 +204,19 @@ A function for computing the rolling and expanding means of time-series data:
 \begin{column}{.48\linewidth}
 ```
 
+Expanding window
 $$
 \begin{aligned}
-\text{mean}&=\frac{1}{n}\sum_{i=1}^{n}{x_{i}}
+\text{sum}_{x}\leftarrow&\text{sum}_{x}+\text{x}_{new}
 \end{aligned}
 $$
 
-```{r eval = FALSE, echo = TRUE}
-mean <- sum(x) / length(x)
-```
+Rolling window
+$$
+\begin{aligned}
+\text{sum}_{x}\leftarrow&\text{sum}_{x}+\text{x}_{new}-\text{x}_{old}
+\end{aligned}
+$$
 
 ```{=tex}
 \end{column}
@@ -230,7 +233,7 @@ dates <- rev(seq(Sys.Date(), length.out = n_obs, by = "-1 day"))
 x <- matrix(rnorm(n_obs * n_vars), nrow = n_obs, ncol = n_vars)
 x <- zoo::zoo(x, dates)
 
-mean_mat <- na.omit(roll::roll_mean(x, width = 15))
+mean_mat <- na.omit(roll::roll_mean(x, width = 150))
 mean_mlt <- data.table::melt(data.table::as.data.table(mean_mat, keep.rownames = "index"),
                              id.vars = "index")
 mean_mlt[ , index := as.Date(index)]
@@ -244,9 +247,35 @@ print(mean_plt)
 \end{column}
 \end{columns}
 ```
-
 ```{r eval = FALSE, echo = TRUE}
 roll::roll_mean(x, width)
+```
+
+# **Rolling linear models**
+
+<!-- https://quarto.org/docs/authoring/markdown-basics.html#raw-content -->
+
+A function for computing the rolling and expanding linear models of time-series data:
+
+Expanding window
+$$
+\begin{aligned}
+\text{sumsq}_{xy}\leftarrow&\text{sumsq}_{xy}+(\text{x}_{new}-\text{mean}_{x})(\text{y}_{new}-\text{mean}_{prev_y})\\
+\text{coef}\leftarrow&\text{sumsq}_{xx}^{-1}\times\text{sumsq}_{xy}\\
+\end{aligned}
+$$
+
+Rolling window
+$$
+\begin{aligned}
+\text{sumsq}_{xy}\leftarrow&\text{sumsq}_{xy}+(\text{x}_{new}-\text{mean}_{x})(\text{y}_{new}-\text{mean}_{prev_y})-\\
+&(\text{x}_{old}-\text{mean}_{x})(\text{y}_{old}-\text{mean}_{prev_y})\\
+\text{coef}\leftarrow&\text{sumsq}_{xx}^{-1}\times\text{sumsq}_{xy}\\
+\end{aligned}
+$$
+
+```{r eval = FALSE, echo = TRUE}
+roll::roll_lm(x, y, width)
 ```
 
 # **Include roll in other packages**

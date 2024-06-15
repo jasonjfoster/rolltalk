@@ -18,7 +18,7 @@ theme_jjf <- function(base_size = 11, base_family = "") {
                    panel.grid = ggplot2::element_line(),
                    strip.background = ggplot2::element_blank(),
                    plot.background = ggplot2::element_blank(),
-                   plot.margin = ggplot2::margin(0))
+                   plot.margin = ggplot2::unit(c(0.01, 0, 0, 0), "inches")) # UPDATED
 
 }
 
