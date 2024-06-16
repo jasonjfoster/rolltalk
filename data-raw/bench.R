@@ -6,21 +6,24 @@ width_ls <- c(100, 1000)
 
 a <- 1
 width <- width_ls[a]
+filename <- paste0(file, "_", width)
 
-df <- data.frame(
-  "zoo::rollmeanr" = NA,
-  "RcppRoll::roll_meanr" = NA,
-  "RollingWindow::RollingMean" = NA,
-  "fromo::running_mean" = NA,
-  "roll::roll_mean*" = NA,
-  "roll::roll_mean" = NA,
-  "data.table::frollmean*" = NA,
-  "data.table::frollmean" = NA,
-  "roll::roll_lm*^" = NA,
-  "roll::roll_lm^" = NA,
-  "roll::roll_lm*" = NA,
-  "roll::roll_lm" = NA
-)
+# df <- data.frame(
+#   "zoo::rollmeanr" = NA,
+#   "RcppRoll::roll_meanr" = NA,
+#   "RollingWindow::RollingMean" = NA,
+#   "fromo::running_mean" = NA,
+#   "roll::roll_mean*" = NA,
+#   "roll::roll_mean" = NA,
+#   "data.table::frollmean*" = NA,
+#   "data.table::frollmean" = NA,
+#   "roll::roll_lm*^" = NA,
+#   "roll::roll_lm^" = NA,
+#   "roll::roll_lm*" = NA,
+#   "roll::roll_lm" = NA
+# )
+# assign(filename, df)
+# save(list = eval(filename), file = paste0(filename, ".rda"))
 
 fn_map <- list(
 
@@ -75,8 +78,6 @@ update_df <- function(fn_map, col, n_threads) {
   data.table::setDTthreads(n_threads)
   RcppParallel::setThreadOptions(n_threads)
 
-  filename <- paste0(file, "_", width)
-
   load(paste0(filename, ".rda"))
   df <- get(filename)
 
@@ -92,8 +93,6 @@ check_df <- function(fn_map, col, n_threads) {
   status <- FALSE
 
   while (!status) {
-
-    filename <- paste0(file, "_", width)
 
     load(paste0(filename, ".rda"))
     df <- get(filename)
@@ -140,6 +139,7 @@ update_df(fn_map, "data.table::frollmean*", 1)
 update_df(fn_map, "roll::roll_lm*^", 1)
 update_df(fn_map, "roll::roll_lm*", 1)
 # system.time(fn_map[["data.table::frollmean*"]]())
+# check_df(fn_map, "roll::roll_lm*", 1)
 
 # multi-thread
 update_df(fn_map, "roll::roll_mean", RcppParallel::defaultNumThreads())
@@ -147,5 +147,4 @@ update_df(fn_map, "data.table::frollmean", RcppParallel::defaultNumThreads())
 update_df(fn_map, "roll::roll_lm^", RcppParallel::defaultNumThreads())
 update_df(fn_map, "roll::roll_lm", RcppParallel::defaultNumThreads())
 # system.time(fn_map[["data.table::frollmean"]]())
-
-check_df(fn_map, "roll::roll_lm", , RcppParallel::defaultNumThreads())
+# check_df(fn_map, "roll::roll_lm", RcppParallel::defaultNumThreads())
