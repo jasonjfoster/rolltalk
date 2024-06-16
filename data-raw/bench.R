@@ -8,6 +8,12 @@ a <- 1
 width <- width_ls[a]
 filename <- paste0(file, "_", width)
 
+set.seed(5640)
+n <- 1000000
+data_table <- data.table::setDT(lapply(1:1000, rnorm, n = n))
+data_matrix <- as.matrix(data_table)
+# lm_data <- cbind(1, data_matrix)
+
 # df <- data.frame(
 #   "zoo::rollmeanr" = NA,
 #   "RcppRoll::roll_meanr" = NA,
@@ -121,12 +127,6 @@ check_df <- function(fn_map, col, n_threads) {
 # fastLm_coef <- function(data, x_cols, y_cols) {
 #   return(coef(RcppArmadillo::fastLmPure(data[ , x_cols], data[ , y_cols])))
 # }
-
-set.seed(5640)
-n <- 1000000
-data_table <- data.table::setDT(lapply(1:1000, rnorm, n = n))
-data_matrix <- as.matrix(data_table)
-# lm_data <- cbind(1, data_matrix)
 
 # single-thread
 # update_df(fn_map, "zoo::rollmeanr", 1)
