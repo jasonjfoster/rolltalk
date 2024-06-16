@@ -1,12 +1,11 @@
 # https://gist.github.com/jangorecki/2d254c1451ec4b62c2fbb962a290b41b
 # devtools::install_github("andrewuhl/RollingWindow")
 
-test_file <- "bench"
-test_width <- c(100, 1000)
+file <- "bench"
+width_ls <- c(100, 1000)
 
 a <- 1
-width <- test_width[a]
-file <- test_file[a]
+width <- width_ls[a]
 
 df <- data.frame(
   "zoo::rollmeanr" = NA,
