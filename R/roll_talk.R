@@ -25,8 +25,10 @@
 ##' @export
 roll_talk <- function(...) {
 
+  quarto_path <- system.file("quarto", package = "rolltalk")
+
   # https://github.com/quarto-dev/quarto-r/issues/81
-  input <- system.file("qmd", "roll_talk.qmd", package = "rolltalk")
+  input <- file.path(quarto_path, "roll_talk.qmd")
 
   quarto::quarto_render(input, ...)
 

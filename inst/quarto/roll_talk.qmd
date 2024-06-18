@@ -132,7 +132,7 @@ bench_df[fn == "RcppRoll::roll_meanr"][["facet"]] <- "right"
 
 ```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center", fig.height = 2.4, fig.width = 4.6}
 # utils <- "utils.R"
-utils <- system.file("qmd", "utils.R", package = "rolltalk")
+utils <- system.file("quarto", "utils.R", package = "rolltalk")
 source(utils)
 
 bench_cols <- c("RcppRoll::roll_meanr", "RollingWindow::RollingMean", "fromo::running_mean", "roll::roll_mean",
@@ -253,15 +253,13 @@ roll::roll_mean(x, width)
 
 A function for computing the rolling and expanding linear models of time-series data:
 
-Expanding window
-$$
+Expanding window $$
 \begin{aligned}
 \text{sumsq}_{xy}\leftarrow&\text{sumsq}_{xy}+(\text{x}_{new}-\text{mean}_{x})(\text{y}_{new}-\text{mean}_{prev_y})
 \end{aligned}
 $$
 
-Rolling window
-$$
+Rolling window $$
 \begin{aligned}
 \text{sumsq}_{xy}\leftarrow&\text{sumsq}_{xy}+(\text{x}_{new}-\text{mean}_{x})(\text{y}_{new}-\text{mean}_{prev_y})-\\
 &(\text{x}_{old}-\text{mean}_{x})(\text{y}_{old}-\text{mean}_{prev_y})
