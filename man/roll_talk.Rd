@@ -4,9 +4,13 @@
 \alias{roll_talk}
 \title{Rolling and Expanding Statistics}
 \usage{
-roll_talk(...)
+roll_talk(output_dir = getwd(), output_file = "roll_talk.pdf", ...)
 }
 \arguments{
+\item{output_dir}{Directory for the rendered PDF file.}
+
+\item{output_file}{Name of the rendered PDF file.}
+
 \item{...}{Additional arguments passed to \code{\link[quarto:quarto_render]{quarto::quarto_render}}.}
 }
 \description{

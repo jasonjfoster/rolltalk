@@ -8,7 +8,7 @@ format:
   beamer:
     include-in-header: header.tex
     header-includes: \titlegraphic{\includegraphics[width=0.625in]{logo.png}}
-editor: visual
+editor: source
 ---
 
 # **Rolling and expanding statistics**
@@ -17,7 +17,9 @@ editor: visual
 
 **`roll`** is a package that provides fast and efficient computation of rolling and expanding statistics for time-series data:
 
-```{r eval = FALSE, echo = TRUE}
+```{r}
+#| eval: false
+#| echo: true
 install.packages("roll")
 ```
 
@@ -55,6 +57,7 @@ install.packages("roll")
   \end{minipage}
 \end{table}
 ```
+
 # **Fast and efficient computation**
 
 Based on the speed requirements and sequential nature of many problems in practice, the **`roll`** package uses the following:
@@ -73,16 +76,19 @@ Based on the speed requirements and sequential nature of many problems in practi
 \begin{column}{.48\linewidth}
 
 \hfill \break
-\includegraphics{example.png}
+\includegraphics[width=\linewidth, keepaspectratio]{example.png}
 
 \end{column}
 \end{columns}
 ```
+
 # **Parallel programming tools for Rcpp**
 
 **`RcppParallel`**, developed by the Rcpp Core team, makes it easy to create safe, portable, high-performance parallel algorithms using \cpp{} and **`Rcpp`**:
 
-```{r eval = FALSE, echo = TRUE}
+```{r}
+#| eval: false
+#| echo: true
 install.packages("RcppParallel")
 ```
 
@@ -101,7 +107,8 @@ For more information, visit the **`RcppParallel`** website: [\underline{https://
 
 Full data set includes 1,000,000 observations and 1,000 columns. A rolling window requires over `r (1000000 * 1000) / 1000000000` billion calculations! Note window size.
 
-```{r echo = FALSE}
+```{r}
+#| echo: false
 read_df <- function(file, group) {
   
   filename <- paste0(file, "_", group)
@@ -130,7 +137,12 @@ bench_df[ , facet := "left"]
 bench_df[fn == "RcppRoll::roll_meanr"][["facet"]] <- "right"
 ```
 
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center", fig.height = 2.4, fig.width = 4.6}
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 2.4
+#| fig-width: 4.6
+
 # utils <- "utils.R"
 utils <- system.file("quarto", "utils.R", package = "rolltalk")
 source(utils)
@@ -166,7 +178,12 @@ print(bench_plt)
 
 Take advantage of parallel processing in \cpp{} and online algorithms in the `roll` package for rolling and expanding statistics:
 
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center", fig.height = 2.4, fig.width = 4.6}
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 2.4
+#| fig-width: 4.6
+
 bench_cols <- c("roll::roll_lm*^", "roll::roll_lm*", "roll::roll_lm^", "roll::roll_lm")
 
 bench_plt <- ggplot2::ggplot() +
@@ -203,13 +220,16 @@ A function for computing the rolling and expanding means of time-series data:
 \begin{columns}
 \begin{column}{.48\linewidth}
 ```
-Expanding window $$
+
+Expanding window
+$$
 \begin{aligned}
 \text{sum}_{x}\leftarrow&\text{sum}_{x}+\text{x}_{new}
 \end{aligned}
 $$
 
-Rolling window $$
+Rolling window
+$$
 \begin{aligned}
 \text{sum}_{x}\leftarrow&\text{sum}_{x}+\text{x}_{new}-\text{x}_{old}
 \end{aligned}
@@ -219,7 +239,13 @@ $$
 \end{column}
 \begin{column}{.48\linewidth}
 ```
-```{r echo = FALSE, fig.align = "center", fig.height = 3.2, fig.width = 3.2}
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 3.2
+#| fig-width: 3.2
+
 set.seed(5640)
 n_vars <- 4
 n_obs <- 1500
@@ -227,6 +253,7 @@ n_size <- n_obs * n_vars
 dates <- rev(seq(Sys.Date(), length.out = n_obs, by = "-1 day"))
 
 x <- matrix(rnorm(n_obs * n_vars), nrow = n_obs, ncol = n_vars)
+colnames(x) <- paste0("X", 1:ncol(x))
 x <- zoo::zoo(x, dates)
 
 mean_mat <- na.omit(roll::roll_mean(x, width = 150))
@@ -243,7 +270,10 @@ print(mean_plt)
 \end{column}
 \end{columns}
 ```
-```{r eval = FALSE, echo = TRUE}
+
+```{r}
+#| eval: false
+#| echo: true
 roll::roll_mean(x, width)
 ```
 
@@ -253,20 +283,24 @@ roll::roll_mean(x, width)
 
 A function for computing the rolling and expanding linear models of time-series data:
 
-Expanding window $$
+Expanding window
+$$
 \begin{aligned}
 \text{sumsq}_{xy}\leftarrow&\text{sumsq}_{xy}+(\text{x}_{new}-\text{mean}_{x})(\text{y}_{new}-\text{mean}_{prev_y})
 \end{aligned}
 $$
 
-Rolling window $$
+Rolling window
+$$
 \begin{aligned}
 \text{sumsq}_{xy}\leftarrow&\text{sumsq}_{xy}+(\text{x}_{new}-\text{mean}_{x})(\text{y}_{new}-\text{mean}_{prev_y})-\\
 &(\text{x}_{old}-\text{mean}_{x})(\text{y}_{old}-\text{mean}_{prev_y})
 \end{aligned}
 $$
 
-```{r eval = FALSE, echo = TRUE}
+```{r}
+#| eval: false
+#| echo: true
 roll::roll_lm(x, y, width)
 ```
 
@@ -284,13 +318,17 @@ LinkingTo: roll (>= 1.1.7)
 
 2.  Add the following line to a \cpp{} file in the `src` folder
 
-```{Rcpp eval = FALSE, echo = TRUE}
+```{Rcpp}
+//| eval: false
+//| echo: true
 #include <roll.h>
 ```
 
 3.  Retrieve the \cpp{} functions with the namespace `roll`
 
-```{Rcpp eval = FALSE, echo = TRUE}
+```{Rcpp}
+//| eval: false
+//| echo: true
 roll::RollSumOnlineMat()
 roll::RollProdOnlineMat()
 roll::RollMeanOnlineMat()
@@ -302,13 +340,17 @@ roll::RollMinOnlineMat()
 
 Get the released version from CRAN:
 
-```{r eval = FALSE, echo = TRUE}
+```{r}
+#| eval: false
+#| echo: true
 install.packages("roll")
 ```
 
 Or the development version from GitHub:
 
-```{r eval = FALSE, echo = TRUE}
+```{r}
+#| eval: false
+#| echo: true
 # install.packages("devtools")
 devtools::install_github("jasonjfoster/roll")
 ```
@@ -317,7 +359,9 @@ devtools::install_github("jasonjfoster/roll")
 
 Get the latest versions from r-universe:
 
-```{r eval = FALSE, echo = TRUE}
+```{r}
+#| eval: false
+#| echo: true
 packages <- c("roll", "rolleda", "rolleigen",
               "rolloptim", "rollshap", "rolltalk")
 r_universe <- "https://jasonjfoster.r-universe.dev"

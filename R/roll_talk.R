@@ -16,6 +16,8 @@
 ##'
 ##' A presentation for rolling and expanding statistics of time-series data.
 ##'
+##' @param output_dir Directory for the rendered PDF file.
+##' @param output_file Name of the rendered PDF file.
 ##' @param ... Additional arguments passed to \code{\link[quarto:quarto_render]{quarto::quarto_render}}.
 ##' @examples
 ##' \dontrun{
@@ -23,7 +25,7 @@
 ##' roll_talk()
 ##' }
 ##' @export
-roll_talk <- function(...) {
+roll_talk <- function(output_dir = getwd(), output_file = "roll_talk.pdf", ...) {
 
   quarto_path <- system.file("quarto", package = "rolltalk")
 
@@ -31,5 +33,11 @@ roll_talk <- function(...) {
   input <- file.path(quarto_path, "roll_talk.qmd")
 
   quarto::quarto_render(input, ...)
+
+  from_file <- file.path(quarto_path, output_file)
+  to_file <- file.path(output_dir, output_file)
+
+  file.copy(from_file, to_file, overwrite = TRUE)
+  invisible(file.remove(from_file)) # hide '[1] TRUE'
 
 }
