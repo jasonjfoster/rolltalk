@@ -27,6 +27,10 @@
 ##' @export
 roll_talk <- function(output_dir = getwd(), output_file = "roll_talk.pdf", ...) {
 
+  if (Sys.which("pdflatex") == "") {
+    stop("TeX engine 'pdflatex' must be installed; run tinytex::install_tinytex()")
+  }
+
   quarto_path <- system.file("quarto", package = "rolltalk")
 
   # https://github.com/quarto-dev/quarto-r/issues/81
