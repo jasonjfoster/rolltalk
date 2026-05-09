@@ -13,12 +13,15 @@ roll_talk(output_dir = getwd(), output_file = "roll_talk.pdf", ...)
 
 \item{...}{Additional arguments passed to \code{\link[quarto:quarto_render]{quarto::quarto_render}}.}
 }
+\value{
+A PDF file at \code{file.path(output_dir, output_file)} with the rolling and expanding statistics presentation.
+}
 \description{
 A presentation for rolling and expanding statistics of time-series data.
 }
 \examples{
 \dontrun{
-# rolling exploratory data analysis
+# rolling and expanding statistics presentation
 roll_talk()
 }
 }

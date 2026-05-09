@@ -19,9 +19,10 @@
 ##' @param output_dir Directory for the rendered PDF file.
 ##' @param output_file Name of the rendered PDF file.
 ##' @param ... Additional arguments passed to \code{\link[quarto:quarto_render]{quarto::quarto_render}}.
+##' @return A PDF file at \code{file.path(output_dir, output_file)} with the rolling and expanding statistics presentation.
 ##' @examples
 ##' \dontrun{
-##' # rolling exploratory data analysis
+##' # rolling and expanding statistics presentation
 ##' roll_talk()
 ##' }
 ##' @export
