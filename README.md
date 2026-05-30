@@ -4,7 +4,9 @@
 
 ## Overview
 
-`rolltalk` is a presentation that provides rolling and expanding statistics for time-series data.
+'rolltalk' provides a presentation of rolling and expanding statistics for time-series data.
+
+The 'rolltalk' package demonstrates the rolling and expanding statistics of the 'roll' package in a 'Quarto' presentation that is rendered to a PDF file with the `roll_talk()` function.
 
 ## Installation
 
@@ -17,7 +19,7 @@ devtools::install_github("jasonjfoster/rolltalk")
 
 ## Usage
 
-Load the presentation:
+Load the package and render the presentation:
 
 ``` r
 library(rolltalk)

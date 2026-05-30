@@ -1,13 +1,13 @@
 Package: rolltalk
 Type: Package
-Title: Rolling and Expanding Statistics
+Title: Rolling and Expanding Statistics Presentation
 Version: 1.0.0
 Authors@R: person("Jason", "Foster", , "jason.j.foster@gmail.com", c("aut", "cre"))
-Description: Presentation for rolling and expanding statistics of time-series data.
+Description: Presentation of rolling and expanding statistics for time-series data. The 'rolltalk' package demonstrates the rolling and expanding statistics of the 'roll' package in a 'Quarto' presentation that is rendered to a PDF file with the roll_talk() function.
 License: GPL (>= 2)
 URL: https://github.com/jasonjfoster/rolltalk
 BugReports: https://github.com/jasonjfoster/rolltalk/issues
-Depends: R (>= 2.10)
+Depends: R (>= 3.5.0)
 Imports: quarto, data.table, grDevices
 Suggests: ggplot2, scales, zoo
 Encoding: UTF-8
