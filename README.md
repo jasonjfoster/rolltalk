@@ -12,16 +12,16 @@ The 'rolltalk' package demonstrates the rolling and expanding statistics of the 
 
 Install the development version from GitHub:
 
-``` r
-# install.packages("devtools")
-devtools::install_github("jasonjfoster/rolltalk")
+```r
+# install.packages("pak")
+pak::pak("jasonjfoster/rolltalk")
 ```
 
 ## Usage
 
 Load the package and render the presentation:
 
-``` r
+```r
 library(rolltalk)
 
 # rolling and expanding statistics

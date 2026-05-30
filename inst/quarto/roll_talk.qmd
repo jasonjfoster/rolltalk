@@ -351,8 +351,8 @@ Or the development version from GitHub:
 ```{r}
 #| eval: false
 #| echo: true
-# install.packages("devtools")
-devtools::install_github("jasonjfoster/roll")
+# install.packages("pak")
+pak::pak("jasonjfoster/roll")
 ```
 
 # **r-universe - 'roll\*'**

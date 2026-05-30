@@ -1,5 +1,5 @@
 # https://gist.github.com/jangorecki/2d254c1451ec4b62c2fbb962a290b41b
-# devtools::install_github("andrewuhl/RollingWindow")
+# pak::pak("andrewuhl/RollingWindow")
 
 file <- "bench"
 width_ls <- c(100, 1000)
