@@ -1,13 +1,13 @@
 ##' Benchmark Data for Width of 100
 ##'
-##' A data set with the benchmark results for rolling statistics with a `width` of 100.
+##' A data set with the benchmark results for rolling statistics with a \code{width} of 100.
 ##'
 ##' @format A data frame. Rows are evaluation times and columns are the functions.
 "bench_100"
 
 ##' Benchmark Data for Width of 1,000
 ##'
-##' A data set with the benchmark results for rolling statistics with a `width` of 1,000.
+##' A data set with the benchmark results for rolling statistics with a \code{width} of 1,000.
 ##'
 ##' @format A data frame. Rows are evaluation times and columns are the functions.
 "bench_1000"
