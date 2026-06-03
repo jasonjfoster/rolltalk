@@ -10,7 +10,13 @@ The 'rolltalk' package demonstrates the rolling and expanding statistics of the 
 
 ## Installation
 
-Install the development version from GitHub:
+Install the released version from CRAN:
+
+```r
+# install.packages("rolltalk")
+```
+
+Or the development version from GitHub:
 
 ```r
 # install.packages("pak")
