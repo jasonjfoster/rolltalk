@@ -28,8 +28,12 @@
 ##' @export
 roll_talk <- function(output_dir = getwd(), output_file = "roll_talk.pdf", ...) {
 
+  if (Sys.which("quarto") == "") {
+    stop("Quarto CLI not found; install it from https://quarto.org")
+  }
+
   if (Sys.which("pdflatex") == "") {
-    stop("TeX engine 'pdflatex' must be installed; run tinytex::install_tinytex()")
+    stop("LaTeX engine 'pdflatex' not found; install TinyTeX via 'quarto install tinytex'")
   }
 
   quarto_path <- system.file("quarto", package = "rolltalk")
