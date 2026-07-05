@@ -1,31 +1,31 @@
-##' Benchmark Data for Width of 100
-##'
-##' A data set with the benchmark results for rolling statistics with a \code{width} of 100.
-##'
-##' @format A data frame. Rows are evaluation times and columns are the functions.
+#' Benchmark Data for Width of 100
+#'
+#' A data set with the benchmark results for rolling statistics with a \code{width} of 100.
+#'
+#' @format A data frame. Rows are evaluation times and columns are the functions.
 "bench_100"
 
-##' Benchmark Data for Width of 1,000
-##'
-##' A data set with the benchmark results for rolling statistics with a \code{width} of 1,000.
-##'
-##' @format A data frame. Rows are evaluation times and columns are the functions.
+#' Benchmark Data for Width of 1,000
+#'
+#' A data set with the benchmark results for rolling statistics with a \code{width} of 1,000.
+#'
+#' @format A data frame. Rows are evaluation times and columns are the functions.
 "bench_1000"
 
-##' Rolling and Expanding Statistics
-##'
-##' A presentation for rolling and expanding statistics of time-series data.
-##'
-##' @param output_dir Directory for the rendered PDF file.
-##' @param output_file Name of the rendered PDF file.
-##' @param ... Additional arguments passed to \code{\link[quarto:quarto_render]{quarto::quarto_render}}.
-##' @return A PDF file at \code{file.path(output_dir, output_file)} with the rolling and expanding statistics presentation.
-##' @examples
-##' \dontrun{
-##' # rolling and expanding statistics presentation
-##' roll_talk()
-##' }
-##' @export
+#' Rolling and Expanding Statistics
+#'
+#' A presentation for rolling and expanding statistics of time-series data.
+#'
+#' @param output_dir Directory for the rendered PDF file.
+#' @param output_file Name of the rendered PDF file.
+#' @param ... Additional arguments passed to \code{\link[quarto:quarto_render]{quarto::quarto_render}}.
+#' @return A PDF file at \code{file.path(output_dir, output_file)} with the rolling and expanding statistics presentation.
+#' @examples
+#' \dontrun{
+#' # rolling and expanding statistics presentation
+#' roll_talk()
+#' }
+#' @export
 roll_talk <- function(output_dir = getwd(), output_file = "roll_talk.pdf", ...) {
 
   if (Sys.which("quarto") == "") {
